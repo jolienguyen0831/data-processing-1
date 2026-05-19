@@ -1,7 +1,5 @@
 package com.pluralsight.streams;
 
-import com.pluralsight.streams.Person;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,21 +19,26 @@ public class Program {
     }
 
     private static void getAge(List<Person> people) {
-        double averageAge = people.stream().mapToDouble(person-> person.getAge()).average().orElse(0);
+        double averageAge = people.stream().mapToDouble(person -> person.getAge()).average().orElse(0);
         int maxAge = people.stream().map(person -> person.getAge()).reduce(Integer::max).orElse(0);
         int minAge = people.stream().map(person -> person.getAge()).reduce(Integer::min).orElse(0);
 
         System.out.printf("Average age is: %.2f", averageAge);
 
-        System.out.println("Oldest age is: "+ maxAge);
-        System.out.println("Youngest age is: "+minAge);
+        System.out.println("\nOldest age is: " + maxAge);
+        System.out.println("Youngest age is: " + minAge);
     }
 
 
     private static void findMatchingName(List<Person> people, String lastName) {
-        List<Person> matchingPeople = people.stream().filter(person -> person.getLastName().contains(lastName))
+        List<Person> matchingPeople = people.stream()
+                .filter(person -> person.getLastName().toLowerCase().contains(lastName))
                 .toList();
-        System.out.println(matchingPeople);
+        printPeople(matchingPeople);
+    }
+
+    public static void printPeople(List<Person> people) {
+        people.forEach(System.out::println);
     }
 
     private static List<Person> getPeople() {
