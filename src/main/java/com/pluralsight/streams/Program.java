@@ -1,4 +1,4 @@
-package com.pluralsight.loops;
+package com.pluralsight.streams;
 
 import com.pluralsight.streams.Person;
 
@@ -18,26 +18,13 @@ public class Program {
 
         getAge(people);
 
-
-
     }
 
     private static void getAge(List<Person> people) {
-        double averageAge = 0;
-        int total = 0;
-        int minAge = people.get(0).getAge();
-        int maxAge = people.get(0).getAge();
-        for (Person person : people){
-            total += person.getAge();
-            if (person.getAge() > maxAge) {
-                maxAge = person.getAge();
-            }
+        double averageAge = people.stream().mapToDouble(person-> person.getAge()).average().orElse(0);
+        int maxAge = people.stream().map(person -> person.getAge()).reduce(Integer::max).orElse(0);
+        int minAge = people.stream().map(person -> person.getAge()).reduce(Integer::min).orElse(0);
 
-            if (person.getAge() < minAge) {
-                minAge = person.getAge();
-            }
-        }
-        averageAge = ( double)total/ people.size();
         System.out.printf("Average age is: %.2f", averageAge);
 
         System.out.println("Oldest age is: "+ maxAge);
@@ -46,12 +33,8 @@ public class Program {
 
 
     private static void findMatchingName(List<Person> people, String lastName) {
-        List<Person> matchingPeople = new ArrayList<>();
-        for(Person person: people){
-            if (person.getLastName().toLowerCase().contains(lastName)){
-                matchingPeople.add(person);
-            }
-        }
+        List<Person> matchingPeople = people.stream().filter(person -> person.getLastName().contains(lastName))
+                .toList();
         System.out.println(matchingPeople);
     }
 
